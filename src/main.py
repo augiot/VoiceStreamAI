@@ -3,10 +3,15 @@ import asyncio
 import json
 import logging
 
+import os
+import sys
+project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_dir)
+
 from src.asr.asr_factory import ASRFactory
 from src.vad.vad_factory import VADFactory
 
-from .server import Server
+from src.server import Server
 
 
 def parse_args():
@@ -23,7 +28,7 @@ def parse_args():
     parser.add_argument(
         "--vad-args",
         type=str,
-        default='{"auth_token": "huggingface_token"}',
+        default='{"auth_token": "huggingface_token", "model_name": "/mnt/user2/workspace/Aug/model/segmentation/pytorch_model.bin"}',
         help="JSON string of additional arguments for VAD pipeline",
     )
     parser.add_argument(
@@ -35,17 +40,17 @@ def parse_args():
     parser.add_argument(
         "--asr-args",
         type=str,
-        default='{"model_size": "large-v3"}',
+        default='{"model_size": "/mnt/user2/workspace/Aug/model/faster-whisper-large-v3"}',
         help="JSON string of additional arguments for ASR pipeline",
     )
     parser.add_argument(
         "--host",
         type=str,
-        default="127.0.0.1",
+        default="0.0.0.0",
         help="Host for the WebSocket server",
     )
     parser.add_argument(
-        "--port", type=int, default=8765, help="Port for the WebSocket server"
+        "--port", type=int, default=8019, help="Port for the WebSocket server"
     )
     parser.add_argument(
         "--certfile",
